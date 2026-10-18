@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hanif · Semua Aplikasi</title>
+<meta name="description" content="Rumah semua aplikasi Hanif: Markasku, Hanif Dossier Crypto, OFU, NTA, Kantor AI, dan lainnya.">
+<meta name="theme-color" content="#07060b">
+<link rel="icon" href="ikon-192.png">
+<script>
+/* 18 Okt 2026: markasku.my.id jadi portal semua aplikasi; Markasku pindah ke app.markasku.my.id.
+   Yang masih datang ke alamat lama diteruskan: tautan login email (#access_token…), rute Markasku (#sholat, #keuangan…),
+   aplikasi yang sudah terpasang (tampilan standalone / aplikasi Android). Pengguna mode coba yang punya data di browser
+   ini tidak diteruskan otomatis; mereka diberi tombol pindahkan data dulu (lihat bawah). */
+(function () {
+  var APP = 'https://app.markasku.my.id/', h = location.hash, s = location.search, adaData = false;
+  try { adaData = !!localStorage.getItem('markas:mode-coba'); } catch (e) {}
+  // Aplikasi Android Markasku versi lama (Capacitor, server.url = markasku.my.id): pindah alamat akan dibuka di Chrome,
+  // jadi Markasku dimuat di tempat. Kodenya diambil dari app.markasku.my.id; data & sesi login tetap milik alamat ini.
+  if (window.Capacitor) { window.PINJAM = true; document.documentElement.style.background = '#1b1230';
+    var KUNCI = 'portal:markasku-html', pasang = function (html) {
+      html = html.replace(/<head([^>]*)>/i, '<head$1><base href="' + APP + '">'); document.open(); document.write(html); document.close(); };
+    fetch(APP, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw 0; return r.text(); })
+      .then(function (html) { try { localStorage.setItem(KUNCI, html); } catch (e) {} pasang(html); })
+      .catch(function () { var lama = null; try { lama = localStorage.getItem(KUNCI); } catch (e) {} if (lama) pasang(lama);
+        else document.addEventListener('DOMContentLoaded', function () { document.body.innerHTML = '<p style="color:#f4ece0;font:16px system-ui;padding:40px 24px;text-align:center">Markasku butuh internet untuk dibuka pertama kali. Sambungkan internet lalu buka lagi.</p>'; }); });
+    return; }
+  var terpasang = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+  if (!adaData && (h.length > 1 || s.length > 1 || terpasang)) location.replace(APP + s + h);
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--malam:#07060b;--tinta:#f4ece0;--redup:#b9ab9a;--samar:#7d7266;--emas:#e3b25a;--emas2:#f5d28a;--merah:#e2553a;--kaca:rgba(255,248,235,.045);--garis:rgba(245,210,138,.16)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--malam);color:var(--tinta);font-family:'Plus Jakarta Sans',system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+/* ---------- panggung pembuka ---------- */
+.panggung{position:relative;height:100svh;min-height:620px;overflow:hidden}
+.panggung svg.adegan{position:absolute;inset:0;width:100%;height:100%}.panggung svg.depan{z-index:2;pointer-events:none}
+#bintang{position:absolute;inset:0;width:100%;height:100%}
+.lapis{will-change:transform}
+.kabut{animation:hanyut 38s ease-in-out infinite alternate}.kabut.b{animation-duration:52s;animation-direction:alternate-reverse}
+@keyframes hanyut{from{transform:translateX(-60px)}to{transform:translateX(60px)}}
+.bulan-cahaya{animation:denyut 7s ease-in-out infinite}@keyframes denyut{50%{opacity:.75}}
+.pelita{animation:kerlip 3.2s ease-in-out infinite}.pelita:nth-child(2n){animation-delay:-1.4s}.pelita:nth-child(3n){animation-delay:-2.3s}
+@keyframes kerlip{50%{opacity:.55}}
+.kepala{position:absolute;inset:0 0 auto;display:flex;justify-content:space-between;align-items:flex-start;padding:28px clamp(18px,4vw,56px);z-index:3}
+.merek{display:flex;gap:12px;align-items:center}.merek svg{width:30px;height:30px;color:var(--emas)}
+.merek b{display:block;font-family:'Cinzel',serif;letter-spacing:.32em;font-size:13px}.merek small{display:block;font-size:11px;letter-spacing:.18em;color:var(--redup);margin-top:3px}
+.kepala nav{display:flex;gap:22px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--redup)}.kepala nav a:hover{color:var(--emas2)}
+.semboyan{position:absolute;left:clamp(18px,4vw,56px);top:22%;z-index:3;max-width:360px}
+.semboyan .kecil{font-size:11px;letter-spacing:.3em;color:var(--emas);text-transform:uppercase}
+.semboyan h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(30px,3.4vw,46px);line-height:1.08;margin-top:12px;text-shadow:0 2px 30px rgba(0,0,0,.6)}
+.semboyan h1 em{color:var(--emas2)}
+.semboyan p{color:var(--redup);font-size:14.5px;line-height:1.6;margin-top:14px}
+.judul-besar{position:absolute;left:0;right:0;bottom:19%;text-align:center;z-index:1;font-family:'Cinzel',serif;font-weight:700;font-size:clamp(88px,19vw,300px);letter-spacing:.14em;line-height:1;
+  color:transparent;background:linear-gradient(180deg,rgba(255,244,228,.95) 0%,rgba(255,226,190,.78) 55%,rgba(255,200,150,.15) 100%);-webkit-background-clip:text;background-clip:text;
+  text-shadow:0 0 60px rgba(226,85,58,.18);pointer-events:none;padding-left:.14em;}
+.gulir{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;font-size:11px;letter-spacing:.3em;color:var(--redup);text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:10px}
+.gulir i{width:1px;height:38px;background:linear-gradient(var(--emas),transparent);animation:turun 2.2s ease-in-out infinite}@keyframes turun{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+/* ---------- aplikasi ---------- */
+.aplikasi{position:relative;padding:110px clamp(18px,4vw,56px) 80px;max-width:1240px;margin:0 auto}
+.aplikasi::before{content:'';position:absolute;inset:-160px 0 auto;height:200px;background:linear-gradient(transparent,var(--malam));pointer-events:none}
+.bagian-kepala{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:46px}
+.bagian-kepala .kecil{font-size:11px;letter-spacing:.3em;color:var(--emas);text-transform:uppercase}
+.bagian-kepala h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(34px,4vw,54px);margin-top:10px;line-height:1.05}
+.bagian-kepala h2 em{color:var(--emas2)}
+.bagian-kepala p{color:var(--redup);max-width:420px;font-size:14.5px;line-height:1.6}
+.kelompok{margin-top:44px}.kelompok h3{display:flex;align-items:center;gap:14px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--redup);font-weight:600}
+.kelompok h3::after{content:'';flex:1;height:1px;background:var(--garis)}
+.kisi{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:18px}
+.kartu{position:relative;display:flex;flex-direction:column;gap:12px;padding:22px 22px 20px;border-radius:20px;background:var(--kaca);border:1px solid var(--garis);overflow:hidden;
+  transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s,background .35s;isolation:isolate}
+.kartu::before{content:'';position:absolute;inset:auto -30% -60% -30%;height:120%;background:radial-gradient(closest-side,var(--sorot,rgba(226,85,58,.22)),transparent);opacity:0;transition:opacity .45s;z-index:-1}
+.kartu:hover{transform:translateY(-4px);border-color:rgba(245,210,138,.42);background:rgba(255,248,235,.07)}.kartu:hover::before{opacity:1}
+.kartu .atas{display:flex;justify-content:space-between;align-items:flex-start}
+.ikon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:var(--latar-ikon,rgba(227,178,90,.12));border:1px solid rgba(255,255,255,.06)}
+.lencana{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:99px;border:1px solid var(--garis);color:var(--redup)}
+.lencana.kunci{color:var(--emas2);border-color:rgba(227,178,90,.35)}
+.kartu b{font-size:18px;font-weight:700}.kartu p{color:var(--redup);font-size:13.5px;line-height:1.55;flex:1}
+.kartu .alamat{font-size:11.5px;color:var(--samar);font-family:ui-monospace,Menlo,monospace;display:flex;justify-content:space-between;align-items:center}
+.kartu .alamat span:last-child{color:var(--emas);transition:transform .3s}.kartu:hover .alamat span:last-child{transform:translateX(4px)}
+.pindah{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:20;max-width:min(560px,calc(100% - 32px));padding:16px 18px;border-radius:16px;background:#16101a;border:1px solid rgba(227,178,90,.4);box-shadow:0 20px 60px rgba(0,0,0,.6);display:none;gap:14px;align-items:center;font-size:13.5px;line-height:1.5}
+.pindah.tampil{display:flex}.pindah button{flex:none;border:0;border-radius:99px;padding:10px 16px;font:inherit;font-weight:700;background:var(--emas);color:#1a1206;cursor:pointer}
+footer{border-top:1px solid var(--garis);padding:30px clamp(18px,4vw,56px) 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--samar);font-size:12.5px;max-width:1240px;margin:0 auto}
+footer nav{display:flex;gap:18px}footer a:hover{color:var(--emas2)}
+.muncul{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}.muncul.terlihat{opacity:1;transform:none}
+@media (max-width:720px){.kepala nav{display:none}.semboyan{top:auto;bottom:84px;right:18px}.semboyan h1{font-size:29px}.semboyan p{font-size:13.5px;margin-top:10px}
+  .judul-besar{top:14%;bottom:auto;font-size:25vw;letter-spacing:.06em;padding-left:.06em}.gulir{bottom:14px}.gulir i{height:26px}}
+@media (prefers-reduced-motion:reduce){.kabut,.bulan-cahaya,.pelita,.gulir i{animation:none}.muncul{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<section class="panggung" id="atas">
+  <canvas id="bintang"></canvas>
+  <svg class="adegan" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="langit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05050b"/><stop offset=".45" stop-color="#140c1c"/><stop offset=".75" stop-color="#3a1424"/><stop offset="1" stop-color="#5a1c22"/></linearGradient>
+      <radialGradient id="bulanIsi" cx=".4" cy=".38" r=".7"><stop offset="0" stop-color="#ffe2c4"/><stop offset=".35" stop-color="#f08a5a"/><stop offset=".75" stop-color="#c2382a"/><stop offset="1" stop-color="#7a1a1c"/></radialGradient>
+      <radialGradient id="bulanSinar" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ff7a52" stop-opacity=".55"/><stop offset=".45" stop-color="#e2553a" stop-opacity=".16"/><stop offset="1" stop-color="#e2553a" stop-opacity="0"/></radialGradient>
+      <linearGradient id="gunung1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1424"/><stop offset="1" stop-color="#150b14"/></linearGradient>
+      <linearGradient id="gunung2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c0f19"/><stop offset="1" stop-color="#0c070c"/></linearGradient>
+      <linearGradient id="bukit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#120a10"/><stop offset="1" stop-color="#07060b"/></linearGradient>
+      <linearGradient id="tepiEmas" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#f5a46a" stop-opacity=".9"/><stop offset=".25" stop-color="#e2553a" stop-opacity=".35"/><stop offset=".6" stop-color="#000" stop-opacity="0"/></linearGradient>
+      <radialGradient id="pelitaSinar" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd38a" stop-opacity=".95"/><stop offset=".3" stop-color="#ff9a4a" stop-opacity=".35"/><stop offset="1" stop-color="#ff7a2a" stop-opacity="0"/></radialGradient>
+      <filter id="kabur" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="22"/></filter>
+      <filter id="kaburKecil"><feGaussianBlur stdDeviation="3"/></filter>
+    </defs>
+    <rect width="1600" height="900" fill="url(#langit)"/>
+    <g class="lapis" data-dalam="0.04"><g id="bulan">
+      <circle class="bulan-cahaya" cx="1060" cy="300" r="330" fill="url(#bulanSinar)"/>
+      <circle cx="1060" cy="300" r="104" fill="url(#bulanIsi)"/>
+      <g fill="#6a1418" opacity=".16"><circle cx="1030" cy="280" r="16"/><circle cx="1088" cy="322" r="11"/><circle cx="1062" cy="252" r="7"/><circle cx="1012" cy="330" r="9"/></g>
+    </g></g>
+    <g class="lapis" data-dalam="0.08"><ellipse class="kabut" cx="700" cy="560" rx="760" ry="60" fill="#5a2232" opacity=".35" filter="url(#kabur)"/></g>
+    <g class="lapis" data-dalam="0.12"><path d="M0 640 L120 560 L230 600 L360 500 L470 560 L560 520 L700 590 L820 540 L940 600 L1080 520 L1220 580 L1340 510 L1460 570 L1600 530 L1600 900 L0 900Z" fill="url(#gunung1)"/></g>
+    <g class="lapis" data-dalam="0.2"><path d="M0 700 L160 620 L300 670 L420 610 L560 680 L700 640 L840 690 L1000 630 L1140 690 L1300 620 L1460 680 L1600 640 L1600 900 L0 900Z" fill="url(#gunung2)"/></g>
+  </svg>
+  <div class="judul-besar" aria-hidden="true">HANIF</div>
+  <!-- lapis depan dipisah supaya candi & bukit berdiri di depan huruf besar -->
+  <svg class="adegan depan" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <g class="lapis" data-dalam="0.28" id="candi"></g>
+    <g class="lapis" data-dalam="0.3"><ellipse class="kabut b" cx="900" cy="760" rx="900" ry="70" fill="#3a1424" opacity=".45" filter="url(#kabur)"/></g>
+    <g class="lapis" data-dalam="0.42" id="depan"></g>
+    <g id="kunang"></g>
+  </svg>
+  <header class="kepala">
+    <a class="merek" href="#atas" aria-label="Hanif"><svg viewBox="0 0 64 64"><path fill-rule="evenodd" d="M32 12c-10 10-17 17-17 26a17 17 0 0 0 34 0c0-9-7-16-17-26zM32 22a2.2 2.2 0 0 1 2.2 2.2v21.6a2.2 2.2 0 0 1-4.4 0V24.2A2.2 2.2 0 0 1 32 22z" fill="currentColor"/></svg><span><b>HANIF</b><small>MARKASKU.MY.ID</small></span></a>
+    <nav><a href="#aplikasi">Aplikasi</a><a href="#usaha">Usaha</a><a href="#kantor">Kantor AI</a></nav>
+  </header>
+  <div class="semboyan muncul">
+    <div class="kecil">Rumah semua aplikasi</div>
+    <h1>Tempat semua karya <em>berpulang</em>, di bawah satu bulan.</h1>
+    <p>Pusat kendali diri, riset crypto, catatan usaha, sampai kantor AI yang bekerja tiap malam. Semuanya bisa dibuka dari sini.</p>
+  </div>
+  <a class="gulir" href="#aplikasi"><span>Lihat aplikasi</span><i></i></a>
+</section>
+
+<main class="aplikasi" id="aplikasi">
+  <div class="bagian-kepala muncul"><div><div class="kecil">Semua aplikasi</div><h2>Satu pintu, <em>banyak rumah</em></h2></div>
+    <p>Setiap aplikasi punya alamat dan akunnya sendiri. Ketuk kartunya untuk membuka. Aplikasi bertanda sandi hanya bisa dibuka pemiliknya.</p></div>
+  <div id="daftar"></div>
+</main>
+<footer><span>© 2026 Hanif · markasku.my.id</span><nav><a href="privasi.html">Privasi Markasku</a><a href="hapus-akun.html">Hapus akun Markasku</a></nav></footer>
+<div class="pindah" id="pindah"><span>Ada catatan Markasku <b>mode coba</b> di browser ini. Markasku sekarang pindah ke <b>app.markasku.my.id</b>; pindahkan catatanmu ke sana supaya tidak hilang.</span><button id="bPindah">Pindahkan</button></div>
+
+<script>
+if (!window.PINJAM) (function () {
+// ---------- daftar aplikasi
+const APL = [
+  { grup: 'Produk', id: 'produk', isi: [
+    { nama: 'Markasku', ikon: '🕌', ket: 'Pusat kendali diri: jadwal sholat kotamu, kebiasaan, keuangan bergaya buku kas, jurnal, dan target hidup.', url: 'https://app.markasku.my.id/', publik: true, warna: 'rgba(79,122,104,.28)' },
+    { nama: 'Hanif Dossier Crypto', ikon: '📜', ket: 'Riset crypto dengan sisi bear case: dossier proyek, screening altcoin, kelas, dan kabar harian.', url: 'https://hanif-dossier.github.io/', publik: true, warna: 'rgba(227,178,90,.22)' } ] },
+  { grup: 'Usaha', id: 'usaha', isi: [
+    { nama: 'OFU · Minyak', ikon: '🛢️', ket: 'Absensi, gaji, setoran toko, dan laporan harian usaha minyak.', url: 'https://minyak.markasku.my.id/', warna: 'rgba(232,181,74,.2)' },
+    { nama: 'NTA', ikon: '🍱', ket: 'Invoice dapur, stok gudang, barang laku, piutang, dan arus kas usaha NTA.', url: 'https://mbg.markasku.my.id/', warna: 'rgba(95,208,143,.2)' } ] },
+  { grup: 'Kantor AI & game', id: 'kantor', isi: [
+    { nama: 'Kantor AI', ikon: '🏢', ket: 'Kota 3D tempat para karyawan AI bekerja: siapa yang sedang bertugas, hasil, dan biayanya.', url: 'https://kantor.markasku.my.id/', warna: 'rgba(91,141,232,.22)' },
+    { nama: 'Lantai Trading', ikon: '📈', ket: 'Robot trading futures dengan aturan risiko ketat, rapor untung-rugi setiap transaksi.', url: 'https://kantor.markasku.my.id/lantai.html', warna: 'rgba(226,85,58,.22)' },
+    { nama: 'Arkade', ikon: '🎮', ket: 'Operasi Brankas, Lapangan Tembak, dan Tangkap Koin untuk istirahat sejenak.', url: 'https://kantor.markasku.my.id/arkade.html', warna: 'rgba(200,107,255,.2)' },
+    { nama: 'Juragan Sewa', ikon: '🏘️', ket: 'Bangun kerajaan properti sewaan di Pulau Nusa Juragan sampai bebas finansial.', url: 'https://kantor.markasku.my.id/juragan.html', warna: 'rgba(63,182,201,.2)' } ] },
+  { grup: 'Pribadi', id: 'pribadi', isi: [
+    { nama: 'My Little Brain', ikon: '🧠', ket: 'Dasbor pribadi: tautan harian, kekayaan pribadi dan usaha, serta aset crypto yang tersinkron.', url: 'https://hanif-dossier.github.io/hanif-dashboard/', warna: 'rgba(90,107,140,.3)' } ] } ];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+document.getElementById('daftar').innerHTML = APL.map(g => `<section class="kelompok muncul" id="${g.id}"><h3>${esc(g.grup)}</h3><div class="kisi">${g.isi.map(a => `
+  <a class="kartu" href="${a.url}" style="--sorot:${a.warna};--latar-ikon:${a.warna}"><div class="atas"><span class="ikon">${a.ikon}</span><span class="lencana ${a.publik ? '' : 'kunci'}">${a.publik ? 'Publik' : 'Pakai sandi'}</span></div>
+    <b>${esc(a.nama)}</b><p>${esc(a.ket)}</p><div class="alamat"><span>${esc(a.url.replace('https://', '').replace(/\/$/, ''))}</span><span>→</span></div></a>`).join('')}</div></section>`).join('');
+
+// ---------- candi (bertingkat seperti Prambanan) dan pepohonan depan, digambar dari kode
+const NS = 'http://www.w3.org/2000/svg', el = (t, a, induk) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); induk && induk.appendChild(e); return e; };
+function candi(g, cx, dasar, lebar, tinggi, tingkat) { let d = '', y = dasar, w = lebar; const h = tinggi / (tingkat + 2.2);
+  d += `M${cx - w / 2} ${y}`; const kanan = [];
+  for (let i = 0; i < tingkat; i++) { const w2 = w * .8, y2 = y - h;
+    d += ` L${cx - w / 2} ${y - h * .25} L${cx - w2 / 2 - w * .03} ${y - h * .25} L${cx - w2 / 2 - w * .03} ${y - h * .4} L${cx - w2 / 2} ${y2}`;
+    kanan.unshift(`L${cx + w2 / 2} ${y2} L${cx + w2 / 2 + w * .03} ${y - h * .4} L${cx + w2 / 2 + w * .03} ${y - h * .25} L${cx + w / 2} ${y - h * .25} L${cx + w / 2} ${y}`); y = y2; w = w2; }
+  // puncak: ratna (mahkota bertumpuk) lalu kemuncak runcing
+  d += ` L${cx - w * .32} ${y - h * .5} L${cx - w * .2} ${y - h * .9} L${cx - w * .06} ${y - h * 1.7} L${cx} ${y - h * 2.2} L${cx + w * .06} ${y - h * 1.7} L${cx + w * .2} ${y - h * .9} L${cx + w * .32} ${y - h * .5} L${cx + w / 2} ${y} ` + kanan.join(' ') + ' Z';
+  el('path', { d, fill: '#0d080d' }, g); el('path', { d, fill: 'url(#tepiEmas)', opacity: '.5' }, g); return { puncak: y - h * 2.2, h }; }
+(function () { const g = document.getElementById('candi');
+  el('path', { d: 'M180 760 Q520 650 800 655 Q1080 650 1420 760 L1600 900 L0 900Z', fill: 'url(#bukit)' }, g);   // bukit
+  el('rect', { x: 560, y: 655, width: 480, height: 14, fill: '#0b070b' }, g); el('rect', { x: 600, y: 643, width: 400, height: 14, fill: '#0d080d' }, g);   // batur
+  [[655, 643, 70, 150, 3], [945, 643, 70, 150, 3], [710, 643, 84, 200, 3], [890, 643, 84, 200, 3]].forEach(([x, y, w, t, n]) => candi(g, x, y, w, t, n));
+  candi(g, 800, 643, 150, 330, 4);
+  // pelita di batur
+  [610, 680, 740, 800, 860, 920, 990].forEach(x => { el('circle', { class: 'pelita', cx: x, cy: 640, r: 16, fill: 'url(#pelitaSinar)' }, g); el('circle', { cx: x, cy: 640, r: 2.2, fill: '#ffe0a0' }, g); });
+  el('rect', { x: 788, y: 610, width: 24, height: 33, rx: 12, fill: '#ffb36a', opacity: '.55', filter: 'url(#kaburKecil)' }, g);   // pintu menyala
+  // depan: pohon kelapa & beringin siluet
+  const dp = document.getElementById('depan');
+  el('path', { d: 'M0 900 L0 770 Q200 720 380 790 Q520 840 640 900Z M1600 900 L1600 760 Q1420 730 1260 800 Q1120 860 1020 900Z', fill: '#050407' }, dp);
+  const kelapa = (x, y, t, miring) => { el('path', { d: `M${x} ${y} Q${x + miring * .5} ${y - t * .5} ${x + miring} ${y - t}`, stroke: '#050407', 'stroke-width': 9, fill: 'none', 'stroke-linecap': 'round' }, dp);
+    const px = x + miring, py = y - t; for (let i = 0; i < 9; i++) { const a = -Math.PI + i * Math.PI / 8 + (i % 2 ? .1 : -.1), L = 70 + (i % 3) * 18;
+      el('path', { d: `M${px} ${py} Q${px + Math.cos(a) * L * .55} ${py + Math.sin(a) * L * .55 - 18} ${px + Math.cos(a) * L} ${py + Math.sin(a) * L + 22}`, stroke: '#050407', 'stroke-width': 7, fill: 'none', 'stroke-linecap': 'round' }, dp); } };
+  kelapa(90, 900, 330, 40); kelapa(200, 900, 250, -25); kelapa(1480, 900, 360, -50); kelapa(1380, 900, 240, 30);
+  // kunang-kunang
+  const k = document.getElementById('kunang'); for (let i = 0; i < 26; i++) { const c = el('circle', { cx: 200 + Math.random() * 1200, cy: 640 + Math.random() * 220, r: 1.6 + Math.random() * 1.6, fill: '#ffd98a', opacity: .0 }, k); c.dataset.f = Math.random() * 6; }
+})();
+
+// ---------- bintang berkelip (kanvas)
+const kv = document.getElementById('bintang'), cx = kv.getContext('2d'); let B = [];
+function ukur() { const r = devicePixelRatio || 1; kv.width = innerWidth * r; kv.height = innerHeight * r; cx.setTransform(r, 0, 0, r, 0, 0);
+  B = Array.from({ length: Math.round(innerWidth * innerHeight / 3200) }, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight * .62, r: Math.random() * 1.2 + .2, f: Math.random() * 6, v: .5 + Math.random() * 1.5 })); }
+// layar sempit memotong kiri-kanan adegan; bulan digeser ke bagian yang masih terlihat
+function letakBulan() { const lebarTerlihat = 900 * innerWidth / innerHeight, geser = Math.min(0, 800 + lebarTerlihat / 2 - 110 - 1060);
+  document.getElementById('bulan').setAttribute('transform', `translate(${geser} ${lebarTerlihat < 900 ? -40 : 0})`); }
+ukur(); letakBulan(); addEventListener('resize', () => { ukur(); letakBulan(); });
+const lapis = [...document.querySelectorAll('.lapis')], kunang = [...document.querySelectorAll('#kunang circle')], diam = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let mx = 0, my = 0, tx = 0, ty = 0; addEventListener('pointermove', e => { mx = (e.clientX / innerWidth - .5); my = (e.clientY / innerHeight - .5); });
+function bingkai(t) { t /= 1000; cx.clearRect(0, 0, innerWidth, innerHeight);
+  for (const s of B) { cx.globalAlpha = .35 + .65 * Math.abs(Math.sin(t * s.v + s.f)); cx.fillStyle = '#fff3e0'; cx.beginPath(); cx.arc(s.x, s.y, s.r, 0, 6.283); cx.fill(); }
+  tx += (mx - tx) * .04; ty += (my - ty) * .04; const g = scrollY;
+  if (!diam) { lapis.forEach(l => { const d = +l.dataset.dalam; l.setAttribute('transform', `translate(${-tx * d * 160} ${-ty * d * 60 + g * d * .9})`); });
+    kunang.forEach(c => { const f = +c.dataset.f; c.setAttribute('opacity', Math.max(0, Math.sin(t * .9 + f)) * .9); c.setAttribute('transform', `translate(${Math.sin(t * .3 + f) * 30} ${Math.cos(t * .25 + f) * 18})`); }); }
+  requestAnimationFrame(bingkai); }
+requestAnimationFrame(bingkai);
+// muncul saat digulir
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('terlihat'); io.unobserve(e.target); } }), { threshold: .12 });
+document.querySelectorAll('.muncul').forEach(x => io.observe(x));
+
+// ---------- pindahkan data mode coba Markasku ke app.markasku.my.id
+(function () { let data = null; try { if (localStorage.getItem('markas:mode-coba')) { data = {}; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('markas:')) data[k] = localStorage.getItem(k); } } } catch (e) {}
+  if (!data) return; const kotak = document.getElementById('pindah'); kotak.classList.add('tampil');
+  document.getElementById('bPindah').onclick = () => { const w = window.open('https://app.markasku.my.id/#terima-data', '_blank');
+    const kirim = e => { if (e.origin !== 'https://app.markasku.my.id') return; if (e.data === 'siap') w.postMessage({ markas: data }, 'https://app.markasku.my.id');
+      if (e.data === 'diterima') { try { Object.keys(data).forEach(k => localStorage.removeItem(k)); } catch (x) {} kotak.classList.remove('tampil'); removeEventListener('message', kirim); } };
+    addEventListener('message', kirim); }; })();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+})();
+</script>
+</body>
+</html>
